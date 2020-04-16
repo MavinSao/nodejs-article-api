@@ -1,8 +1,16 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express()
 const db = require('./queries')
 const port = 3000
+
+console.log(process.env.USER_DB,
+         process.env.HOST,
+       process.env.DATABASE,
+       process.env.PASS,
+       process.env.PORT_DB,);
+
 
 app.use(bodyParser.json())
 app.use(
