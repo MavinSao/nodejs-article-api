@@ -1,0 +1,15 @@
+{
+  "name": "article-api",
+  "version": "1.0.0",
+  "description": "api for article",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mavin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.0.2"
+  }
+}
