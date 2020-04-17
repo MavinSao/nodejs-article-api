@@ -23,7 +23,7 @@ const getArticles = (req,res)=>{
 
 //Get Article By ID
 const getArticleById = (req,res)=>{
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.aid)
     pool.query('SELECT * FROM articles WHERE id = $1',[id],(error,result)=>{
         if(error) throw error;
         //Validate
