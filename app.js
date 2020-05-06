@@ -2,10 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+var cors = require('cors');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const db = require('./queries');
-const port = 3000;
+
+const port = 3535;
 
 
 const options = {
@@ -15,32 +17,35 @@ const options = {
       title: 'Article API', // Title (required)
       version: '1.0.0', // Version (required)
       description: 'Article API Infomation',
-      
     },
   },
   // Path to the API docs
-  apis: ['./Models/Article.js','./app.js'],
+  apis: ['./Models/Article.js', './app.js'],
 };
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
 const swaggerSpec = swaggerJSDoc(options);
-app.use('/api/v1',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
+app.use('/api/v1', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(cors())
 app.use(bodyParser.json())
 app.use(
-    bodyParser.urlencoded({
-      extended: true,
-    })
+  bodyParser.urlencoded({
+    extended: true,
+  })
 )
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/api-docs.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
 
-app.get('/',(req,res)=>{
-    res.json({info: 'Article API'})
+app.get('/', (req, res) => {
+  res.json({ info: 'Article API' })
 })
 
 /**
@@ -56,7 +61,7 @@ app.get('/',(req,res)=>{
  *       200:
  *         description: articles
  */
-app.get('/articles',db.getArticles)
+app.get('/articles', db.getArticles)
 
 /**
  * @swagger
@@ -78,7 +83,7 @@ app.get('/articles',db.getArticles)
  *        description: articles
  */
 
-app.get('/article/:aid',db.getArticleById)
+app.get('/article/:aid', db.getArticleById)
 
 /**
  * @swagger
@@ -100,7 +105,7 @@ app.get('/article/:aid',db.getArticleById)
  *              schema:
  *                $ref: '#/components/schemas/Article'
  */
-app.post('/articles',db.createArticles)
+app.post('/articles', db.createArticles)
 
 /**
  * @swagger
@@ -127,7 +132,7 @@ app.post('/articles',db.createArticles)
  *      '200':
  *        description: articles
  */
-app.put('/article/:id',db.updateArticle)
+app.put('/article/:id', db.updateArticle)
 
 /**
  * @swagger
@@ -148,9 +153,9 @@ app.put('/article/:id',db.updateArticle)
  *      '200':
  *        description: articles
  */
-app.delete('/article/:id',db.deleteArticle)
+app.delete('/article/:id', db.deleteArticle)
 
-app.listen(port, ()=>{
-    console.log('Listening on port',port);
-    
+app.listen(port, () => {
+  console.log('Listening on port', port);
+
 })
